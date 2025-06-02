@@ -320,12 +320,12 @@ fi
 EOF
 
         echo ""
-        echo "Starting zsh with custom configuration..."
-        echo "Use 'exit' to return to the base shell"
+        echo "Launching Ghostty terminal with configured zsh..."
+        echo "Ghostty will start with your custom zsh configuration automatically"
         echo ""
         
-        # Automatically start zsh with the custom configuration
-        exec ${pkgs.zsh}/bin/zsh --rcs -c "source \$HOME/.config/zsh/dev-shell-zshrc; exec ${pkgs.zsh}/bin/zsh"
+        # Launch Ghostty which will automatically start zsh with custom config
+        exec ${pkgs.ghostty}/bin/ghostty
       '';
     };
     
