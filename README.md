@@ -275,8 +275,7 @@ in
     Bash
     
     ```
-    sudo nixos-rebuild switch --flake /etc/nixos#nixos --extra-experimental-features "nix-command flakes"
-    
+sudo nixos-rebuild switch    
     ```
     
 
