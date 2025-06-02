@@ -22,6 +22,12 @@
       environment.systemPackages = with pkgs; [
         tree
         gh
+
+    # GNOME specific tools
+    gnome-extension-manager           # To manage GNOME Shell Extensions
+    gnome-tweaks                      # For advanced GNOME settings customization
+    dconf-editor                      # Low-level configuration editor for dconf/GSettings
+ 
       ];
 
       # Set Zsh as the default shell for the 'nixos' user on the Live ISO
