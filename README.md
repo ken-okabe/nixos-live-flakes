@@ -270,6 +270,25 @@ This process correctly applies your configuration via `nixos-rebuild switch`.
     }
     
     ```
+
+```
+{ config, pkgs, ... }:
+
+let
+  # Define the path to your cloned flake
+  myLiveFlake = (builtins.getFlake "/home/nixos/nixos-live-flakes");
+in
+
+{
+  imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-graphical-combined.nix> 
+
+              myLiveFlake.nixosModules.default
+];
+
+  
+}
+
+```
     
     **Important:** Do **not** remove or replace the existing `imports` lines. Just add `myLiveFlake.nixosModules.default` to the list. Save and exit the editor.
     
