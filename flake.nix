@@ -72,6 +72,10 @@ background-opacity = 0.9
 split-divider-color = "green"
 gtk-titlebar = true
 
+# Use zsh with custom configuration as default shell
+shell-integration = zsh
+command = zsh --rcs -c "source $HOME/.config/zsh/dev-shell-zshrc; exec zsh"
+
 keybind = [
   "ctrl+c=copy_to_clipboard"
   "ctrl+shift+c=copy_to_clipboard"
@@ -316,14 +320,20 @@ fi
 EOF
 
         echo ""
-        echo "To use zsh with the custom configuration, run:"
-        echo "  zsh --rcs -c 'source \$HOME/.config/zsh/dev-shell-zshrc; zsh'"
+        echo "Starting zsh with custom configuration..."
+        echo "Use 'exit' to return to the base shell"
         echo ""
-        echo "Or simply run 'zsh' and then source the config manually:"
-        echo "  source \$HOME/.config/zsh/dev-shell-zshrc"
+        
+        # Automatically start zsh with the custom configuration
+        exec ${pkgs.zsh}/bin/zsh --rcs -c "source \$HOME/.config/zsh/dev-shell-zshrc; exec ${pkgs.zsh}/bin/zsh"
       '';
     };
     
-
+    # Expose all your individual configuration files as NixOS modules
+    nixosModules = {
+      fonts-ime = import ./fonts-ime.nix;
+      zsh = import ./zsh.nix;
+      ghostty = import ./ghostty.nix;
+    };
   };
 }
