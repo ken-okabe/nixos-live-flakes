@@ -8,7 +8,7 @@
 
   outputs = { self, nixpkgs, ... }: {
 
-    devShells.x86_64-linux.default = nixpkgs.mkShell { # <--- This is the attribute Nix is looking for
+    devShells.x86_64-linux.default = nixpkgs.lib.mkShell { # <--- This is the attribute Nix is looking for
       # Packages that are simply installed and don't have dedicated config modules
       packages = with nixpkgs; [
         tree
