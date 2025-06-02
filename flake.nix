@@ -3,7 +3,7 @@
   description = "NixOS Live ISO configuration flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/NixOS/nixos-unstable";
+         nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05"; 
   };
 
   outputs = { self, nixpkgs, ... }: {
