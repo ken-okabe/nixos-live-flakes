@@ -1,17 +1,25 @@
-# nixos-live-flakes
+ 
 
-Your nixos-live-flakes Repository Structure
+## Your `nixos-live-flakes` Repository Structure
 
+```
 nixos-live-flakes/
 ├── flake.nix
 ├── fonts-ime.nix
 ├── zsh.nix
 └── ghostty.nix
 
-File Contents
-1. nixos-live-flakes/flake.nix
+```
+
+----------
+
+## File Contents
+
+### 1. `nixos-live-flakes/flake.nix`
+
 Nix
 
+```
 # nixos-live-flakes/flake.nix
 {
   description = "NixOS Live ISO configuration flake";
@@ -54,11 +62,17 @@ Nix
   };
 }
 
-2. nixos-live-flakes/fonts-ime.nix
+```
 
-The specified font packages have been removed from this file.
+----------
+
+### 2. `nixos-live-flakes/fonts-ime.nix`
+
+**The specified font packages have been removed from this file.**
+
 Nix
 
+```
 # nixos-live-flakes/fonts-ime.nix
 #
 # Configures the Input Method Editor (IME) for Japanese input (Fcitx5 + Mozc)
@@ -101,9 +115,15 @@ Nix
   };
 }
 
-3. nixos-live-flakes/zsh.nix
+```
+
+----------
+
+### 3. `nixos-live-flakes/zsh.nix`
+
 Nix
 
+```
 # nixos-live-flakes/zsh.nix
 { config, pkgs, ... }:
 
@@ -151,9 +171,15 @@ Nix
   };
 }
 
-4. nixos-live-flakes/ghostty.nix
+```
+
+----------
+
+### 4. `nixos-live-flakes/ghostty.nix`
+
 Nix
 
+```
 # nixos-live-flakes/ghostty.nix
 { config, pkgs, ... }:
 
@@ -188,51 +214,73 @@ in
   environment.etc."xdg/ghostty/config".text = ghosttyConfigContent;
 }
 
-Instructions for NixOS Live ISO with nixos-rebuild switch:
+```
 
-This process correctly applies your configuration via nixos-rebuild switch.
+----------
 
-    Prepare your nixos-live-flakes directory on your local machine with these four files.
+### Instructions for NixOS Live ISO with `nixos-rebuild switch`:
 
-    Clone your repository to your /home/nixos/ directory on the Live ISO.
+This process correctly applies your configuration via `nixos-rebuild switch`.
+
+1.  **Prepare your `nixos-live-flakes` directory** on your local machine with these four files.
+    
+2.  **Clone your repository** to your `/home/nixos/` directory on the Live ISO.
+    
     Bash
-
-git clone https://github.com/your-username/nixos-live-flakes.git /home/nixos/nixos-live-flakes
-
-Modify the Live ISO's configuration.nix file:
-Open /etc/nixos/configuration.nix using sudo and a text editor:
-Bash
-
-sudo nano /etc/nixos/configuration.nix
-
-Inside this file, locate the imports = [ ... ]; section. Add a line to import your flake's default module. It should look like this:
-Nix
-
-# /etc/nixos/configuration.nix on Live ISO
-{ config, pkgs, lib, ... }:
-
-let
-  # Define the path to your cloned flake
-  myLiveFlake = (builtins.getFlake "/home/nixos/nixos-live-flakes");
-in
-{
-  imports = [
-    # Keep all existing Live ISO base imports!
-    # e.g., "${pkgs.path}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
-    # ... other existing imports ...
-
-    # >>> ADD THIS LINE TO IMPORT YOUR FLAKE'S CONFIGURATION <<<
-    myLiveFlake.nixosModules.default
-  ];
-
-  # ... rest of the Live ISO's configuration.nix ...
-}
-
-Important: Do not remove or replace the existing imports lines. Just add myLiveFlake.nixosModules.default to the list. Save and exit the editor.
-
-Run nixos-rebuild switch:
-Bash
-
+    
+    ```
+    git clone https://github.com/your-username/nixos-live-flakes.git /home/nixos/nixos-live-flakes
+    
+    ```
+    
+3.  Modify the Live ISO's configuration.nix file:
+    
+    Open /etc/nixos/configuration.nix using sudo and a text editor:
+    
+    Bash
+    
+    ```
+    sudo nano /etc/nixos/configuration.nix
+    
+    ```
+    
+    Inside this file, locate the `imports = [ ... ];` section. **Add a line to import your flake's default module.** It should look like this:
+    
+    Nix
+    
+    ```
+    # /etc/nixos/configuration.nix on Live ISO
+    { config, pkgs, lib, ... }:
+    
+    let
+      # Define the path to your cloned flake
+      myLiveFlake = (builtins.getFlake "/home/nixos/nixos-live-flakes");
+    in
+    {
+      imports = [
+        # Keep all existing Live ISO base imports!
+        # e.g., "${pkgs.path}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+        # ... other existing imports ...
+    
+        # >>> ADD THIS LINE TO IMPORT YOUR FLAKE'S CONFIGURATION <<<
+        myLiveFlake.nixosModules.default
+      ];
+    
+      # ... rest of the Live ISO's configuration.nix ...
+    }
+    
+    ```
+    
+    **Important:** Do **not** remove or replace the existing `imports` lines. Just add `myLiveFlake.nixosModules.default` to the list. Save and exit the editor.
+    
+4.  **Run `nixos-rebuild switch`:**
+    
+    Bash
+    
+    ```
     sudo nixos-rebuild switch --flake /etc/nixos#nixos --extra-experimental-features "nix-command flakes"
+    
+    ```
+    
 
-After this command completes, your Live ISO's environment should update to reflect your configurations. For Zsh and other shell-related changes, you'll need to log out and back in to the nixos user, or simply open a new terminal session, for them to take full effect.
+After this command completes, your Live ISO's environment should update to reflect your configurations. For Zsh and other shell-related changes, you'll need to log out and back in to the `nixos` user, or simply open a new terminal session, for them to take full effect.
