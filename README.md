@@ -248,29 +248,6 @@ This process correctly applies your configuration via `nixos-rebuild switch`.
     
     Nix
     
-    ```
-    # /etc/nixos/configuration.nix on Live ISO
-    { config, pkgs, lib, ... }:
-    
-    let
-      # Define the path to your cloned flake
-      myLiveFlake = (builtins.getFlake "/home/nixos/nixos-live-flakes");
-    in
-    {
-      imports = [
-        # Keep all existing Live ISO base imports!
-        # e.g., "${pkgs.path}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
-        # ... other existing imports ...
-    
-        # >>> ADD THIS LINE TO IMPORT YOUR FLAKE'S CONFIGURATION <<<
-        myLiveFlake.nixosModules.default
-      ];
-    
-      # ... rest of the Live ISO's configuration.nix ...
-    }
-    
-    ```
-
 ```
 { config, pkgs, ... }:
 
@@ -285,6 +262,7 @@ in
               myLiveFlake.nixosModules.default
 ];
 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   
 }
 
