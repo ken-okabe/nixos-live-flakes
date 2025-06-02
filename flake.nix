@@ -1,45 +1,47 @@
 # nixos-live-flakes/flake.nix
 {
-  description = "NixOS Live ISO configuration flake";
+  description = "Minimal custom flake for NixOS Live ISO development environment";
 
   inputs = {
-         nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable"; # same as liveNixOS 
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   };
 
   outputs = { self, nixpkgs, ... }: {
-    # This 'default' NixOS module combines all your desired configurations.
-    # It will be imported by /etc/nixos/configuration.nix on the Live ISO.
-    nixosModules.default = { config, pkgs, lib, ... }: {
-      # Import all your specific configuration modules directly
-      imports = [
-        ./fonts-ime.nix
-        ./zsh.nix
-        ./ghostty.nix
-        ./key-remap.nix
-      ];
 
-      # Add packages that don't need dedicated configuration files
-      environment.systemPackages = with pkgs; [
+    devShells.x86_64-linux.default = nixpkgs.mkShell { # <--- This is the attribute Nix is looking for
+      # Packages that are simply installed and don't have dedicated config modules
+      packages = with nixpkgs; [
         tree
         gh
-
-    # GNOME specific tools
-    gnome-extension-manager           # To manage GNOME Shell Extensions
-    gnome-tweaks                      # For advanced GNOME settings customization
-    dconf-editor                      # Low-level configuration editor for dconf/GSettings
- 
+        git
+        
+        gnome-extension-manager          
+        gnome-tweaks                    
+        dconf-editor          
       ];
 
-      # Set Zsh as the default shell for the 'nixos' user on the Live ISO
-      users.users.nixos = {
-        shell = pkgs.zsh;
-      };
+      # Import all your specific configuration modules.
+      # Their 'environment.systemPackages' and 'shellHook' options will be combined.
+      modules = [
+        self.fonts-ime
+        self.zsh
+        self.ghostty
+      ];
 
-      # Enable flakes and nix-command for rebuilds on the Live ISO
+      # No top-level shellHook here, as zsh.nix's shellHook will ultimately execute zsh.
+      # Initial setup like mkdir -p will be handled by individual modules' shellHooks.
+
+      # Ensure experimental features are enabled for this shell evaluation
       nix.extraOptions = ''
         experimental-features = nix-command flakes
       '';
-      nix.settings.allowed-uris = [ "https://github.com/NixOS/nixpkgs/archive/" ];
+    };
+
+    # Expose all your individual configuration files as NixOS modules
+    nixosModules = {
+      fonts-ime = import ./fonts-ime.nix;
+      zsh = import ./zsh.nix;
+      ghostty = import ./ghostty.nix;
     };
   };
 }
