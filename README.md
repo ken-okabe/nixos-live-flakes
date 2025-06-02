@@ -277,6 +277,9 @@ in
     ```
     sudo nixos-rebuild switch    
     ```
+    sudo nix-channel --add https://nixos.org/channels/nixos-25.05 nixos
+    sudo nix-channel --update
+
     sudo NIX_CONFIG="experimental-features = nix-command flakes" nixos-rebuild switch
 
 After this command completes, your Live ISO's environment should update to reflect your configurations. For Zsh and other shell-related changes, you'll need to log out and back in to the `nixos` user, or simply open a new terminal session, for them to take full effect.
