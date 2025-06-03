@@ -125,7 +125,7 @@
           noto-fonts-emoji
           liberation_ttf
           fira-code
-          (nerdfonts.override { fonts = [ "FiraCode" ]; })
+          nerd-fonts.fira-code
           fcitx5
           fcitx5-mozc
           fcitx5-gtk
