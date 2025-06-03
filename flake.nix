@@ -95,25 +95,21 @@
         shell-integration = zsh
         command = zsh --rcs -c "source $HOME/.config/zsh/dev-shell-zshrc; exec zsh"
 
-        keybind = [
-          "ctrl+c=copy_to_clipboard"
-          "ctrl+shift+c=copy_to_clipboard"
-          "ctrl+shift+v=paste_from_clipboard"
-          "ctrl+v=paste_from_clipboard"
-          "ctrl+left=goto_split:left"
-          "ctrl+down=goto_split:down"
-          "ctrl+up=goto_split:up"
-          "ctrl+right=goto_split:right"
-          "ctrl+enter=new_split:down"
-        ]
-        clearDefaultKeybinds = false
-        enableZshIntegration = true
+        keybind = ctrl+c=copy_to_clipboard
+        keybind = ctrl+shift+c=copy_to_clipboard
+        keybind = ctrl+shift+v=paste_from_clipboard
+        keybind = ctrl+v=paste_from_clipboard
+        keybind = ctrl+left=goto_split:left
+        keybind = ctrl+down=goto_split:down
+        keybind = ctrl+up=goto_split:up
+        keybind = ctrl+right=goto_split:right
+        keybind = ctrl+enter=new_split:down
       '';
     in
     {
       devShells.${system}.default = pkgs.mkShell {
         # All packages required for your environment
-        packages = with pkgs; [
+        buildInputs = with pkgs; [
           tree
           gh
           git
@@ -129,15 +125,15 @@
           noto-fonts-emoji
           liberation_ttf
           fira-code
-          nerd-fonts.fira-code
+          (nerdfonts.override { fonts = [ "FiraCode" ]; })
           fcitx5
-          fcitx5-mozc-ut
+          fcitx5-mozc
           fcitx5-gtk
           fcitx5-nord
           fcitx5-configtool
-          gnome-extension-manager # Added from your previous code snippet
-          gnome-tweaks          # Added from your previous code snippet
-          dconf-editor          # Added from your previous code snippet
+          gnome-extension-manager
+          gnome-tweaks
+          dconf-editor
         ];
 
         # This shellHook combines all setup logic from previous modules
@@ -285,13 +281,6 @@ EOF_GHOSTTY_CONF
           # Ghostty will then automatically source your custom Zsh configuration.
           exec ${pkgs.ghostty}/bin/ghostty
         '';
-
-        # Ensure experimental features are enabled for this shell evaluation
-        nix.extraOptions = ''
-          experimental-features = nix-command flakes
-        '';
       };
-
-      # Removed nixosModules section as all configuration is now inline in devShells.default
     };
 }
